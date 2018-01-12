@@ -9,3 +9,5 @@ todolist: https://tmrxiaoxiao.github.io/myobject/todolist/index.html
 天猫： https://tmrxiaoxiao.github.io/myobject/%E5%A4%A9%E7%8C%AB/index.html
 
 小米： https://tmrxiaoxiao.github.io/myobject/%E5%B0%8F%E7%B1%B3/index.html
+
+打字游戏： https://tmrxiaoxiao.github.io/myobject/%E6%89%93%E5%AD%97%E6%B8%B8%E6%88%8F/game.html
