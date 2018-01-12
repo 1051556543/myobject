@@ -19,3 +19,7 @@ todolist: https://tmrxiaoxiao.github.io/myobject/todolist/index.html
 苹果官网： https://tmrxiaoxiao.github.io/myobject/%E8%8B%B9%E6%9E%9C%E5%93%8D%E5%BA%94%E5%BC%8F%E4%B8%BB%E9%A1%B5/index.html
 
 贪吃蛇： https://tmrxiaoxiao.github.io/myobject/%E8%B4%AA%E5%90%83%E8%9B%87/%E8%B4%AA%E5%90%83%E8%9B%87%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0.html
+
+个人博客：taomouren.duapp.com
+
+企业站： nengguang.duapp.com
