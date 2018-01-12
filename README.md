@@ -7,3 +7,5 @@ todolist: https://tmrxiaoxiao.github.io/myobject/todolist/index.html
 凡客： https://tmrxiaoxiao.github.io/myobject/%E5%87%A1%E5%AE%A2-%E9%99%B6%E6%85%A7%E5%8B%87/index.html
 
 天猫： https://tmrxiaoxiao.github.io/myobject/%E5%A4%A9%E7%8C%AB/index.html
+
+小米： https://tmrxiaoxiao.github.io/myobject/%E5%B0%8F%E7%B1%B3/index.html
