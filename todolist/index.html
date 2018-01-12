@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery.min.js"></script>
+</head>
+<style>
+    *{
+        padding:0;
+        margin: 0;
+        list-style: none;
+    }
+    body{
+        background: #CDCDCD;
+    }
+    header{
+        width: 100%;
+        height: 50px;
+        background: #323232;
+        color: #ffffff;
+        margin-bottom: 30px;
+    }
+    header > section{
+        width: 600px;
+        height: 100%;
+        margin:0 auto;
+    }
+    header > section > p{
+        float: left;
+        font-size: 24px;
+        margin-top: 12px;
+    }
+    header > section > input{
+        float: right;
+        width: 60%;
+        height: 26px;
+        border:none;
+        border-radius: 5px;
+        margin-top: 12px;
+        box-shadow: 0 1px 0 rgba(255,255,255,0.24), 0 1px 6px rgba(0,0,0,0.45) inset ;
+    }
+    .todo{
+        width: 600px;
+        margin:30px auto;
+    }
+    .doing,done{
+        margin-bottom: 30px;
+    }
+    .done > li{
+        background: #eeeeee;
+    }
+    li{
+        margin-top: 10px;
+        width: 100%;
+        height: 35px;
+        background: #ffffff;
+        border-radius: 5px;
+        display: flex;
+    }
+    li > input{
+        width: 20px;
+        height: 20px;
+        margin:8px 10px 7px 20px;
+    }
+    li > p{
+        width: 90%;
+        margin-top: 7px;
+    }
+    .del{
+        width: 30px;
+        height: 35px;
+        line-height: 35px;
+    }
+    footer {
+        text-align: center;
+    }
+</style>
+<body>
+<header>
+    <section>
+    <p>ToDoList</p>
+        <input class="addtodo" type="text" placeholder="添加ToDo">
+    </section>
+</header>
+<section class="todo">
+    <h2>正在进行</h2>
+        <ul class="doing">
+
+        </ul>
+    <h2>已经完成</h2>
+    <ul class="done">
+    </ul>
+</section>
+<footer>
+    Copyright © 2014 todolist.cn clear
+</footer>
+</body>
+</html>
+<script>
+    $(function () {
+        /*var todo=[
+            {id:1,content:"这是内容1",status:false},
+            {id:2,content:"这是内容2",status:true},
+            {id:3,content:"这是内容3",status:false},
+            {id:4,content:"这是内容4",status:true},
+            {id:5,content:"这是内容5",status:false},
+            {id:6,content:"这是内容6",status:true},
+            {id:7,content:"这是内容7",status:false},
+        ]
+//        let nextid=8;
+        localStorage.todo=JSON.stringify(todo);
+        localStorage.nextid=8;*/
+        let todo=localStorage.todo;
+        let nextid=localStorage.nextid;
+//        console.log(todo)
+        if(todo){
+            todo=JSON.parse(todo);
+        }else{
+            nextid=1;
+            todo=[];
+        }
+        function render() {
+            let doing=[];
+            let done=[];
+            todo.forEach(function (value) {
+                if(value.status){
+                    doing.push(value)
+                }else{
+                    done.push(value)
+                }
+            })
+//            console.log(doing,done)
+            let str=``;
+            doing.forEach((value)=>{
+               let id=value.id;
+               str+=`<li id='${id}'><input type="checkbox">
+                    <p>${value.content}</p>
+                    <div class="del">X</div></li>
+               `;
+            });
+            $(".doing").html(str)     //字符串形成后添加     ￥￥￥￥￥￥￥
+            let atr=``;
+            done.forEach((value)=>{
+                let id=value.id;
+                atr+=`<li id='${id}'><input type="checkbox" checked>
+                    <p>${value.content}</p>
+                    <div class="del">X</div></li>
+               `;
+            });
+            $(".done").html(atr)    //字符串形成后添加     ￥￥￥￥￥￥￥
+            localStorage.todo=JSON.stringify(todo)
+        }
+        render();
+        $(".todo").on("click",".del",function () {
+            let event=this.closest("li");
+            console.log(this.id)
+            let index=todo.findIndex(function (val){
+                return val.id==event.id;
+            })
+            console.log(index)
+            todo.splice(index,1)
+            console.log(todo)
+            render()
+        }).on("click","li > p",function () {
+            let input=$("<input type='text'>");
+            let text=$(this).text()
+            let p=$(this);
+            input.val(text)
+            p.html("").append(input);
+            input.focus()
+            input.blur( ()=> {
+                p.html("").append(input.val())
+
+                let event=this.closest("li");
+                let index=todo.findIndex(function (val){
+                    return val.id==event.id;
+                })
+                todo[index].content=input.val()
+                render();
+            });
+        }).on("click","input:checkbox",function () {
+            let event=this.closest("li");
+            let index=todo.findIndex(function (val){
+                return val.id==event.id;
+            })
+            todo[index].status=!todo[index].status
+            render();
+        })
+        $(".addtodo").on("keyup",function (e) {
+            if(e.which==13){
+               todo.unshift({id:nextid,content:$(this).val(),status:true},)
+                render();
+                $(this).val("")
+//                console.log(todo)
+                nextid++;
+            }
+        })
+
+    })
+
+
+
+</script>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas</title>
+    <style>
+        canvas{
+            border:1px solid #000000;
+        }
+        .top{
+            width: 100%;
+            height: 50px;
+        }
+        .active{
+            border: 2px solid blue;
+            background: red;
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<div class="top">
+    <button>退一步</button>
+    <input type="color">
+    <button id="drawLine" class="active">线条</button>
+    <button id="drawStrokeRect">轮廓矩形</button>
+    <button id="drawFillRect">填充矩形</button>
+    <input type="text" value="3" id="num">
+    <button id="drawStrokePol" >轮廓多边形</button>
+    <button id="drawFillPol">填充多边形</button>
+    <button id="drawGradualRect">渐变矩形</button>
+    <button id="drawStrokeCircle">轮廓圆</button>
+    <button id="drawFillCircle">填充圆</button>
+    <button id="drawGradualCircle">渐变圆</button>
+    <button id="drawFillText">实心文字</button>
+    <button id="drawStrokeText">空心文字</button>
+</div>
+<canvas height="500px" width="1350px" ></canvas>
+
+
+</body>
+</html>
+
+<script>
+
+    var can=document.querySelector('canvas');
+    var paint=can.getContext('2d');
+
+    var arr=[];     //
+    var type='drawLine'
+    var funBtn=document.querySelectorAll('button[id]');
+    var num=document.querySelector('#num');   //
+    //声明
+    let ox;
+    let oy;
+    let mx;
+    let my;
+    let x;
+    let y;
+    let getImg=paint.getImageData(0,0,can.width,can.height); //先获取空白画板
+    let putImg;
+    let inputcolor=document.querySelector('input[type=color]')
+    let color='#000';
+    let btn=document.querySelector('button');
+    //      功能
+    inputcolor.onchange=function(){
+        color=this.value;     //颜色的值
+    }
+    btn.onclick=function(){
+        arr.pop();
+        if(arr.length>=1){
+            let imgData=arr[arr.length-1];   //获取数组组后一个信息
+            paint.putImageData(imgData,0,0);
+        }else{
+            alert('真没的退了');
+            paint.clearRect(0,0,can.width,can.height);
+            return;
+        }
+    }
+    funBtn.forEach(value=>{
+        value.onclick=function(){
+            type=this.id;      //获取input的id值
+            funBtn.forEach(val=>{
+                val.classList.remove('active');
+            })
+            value.classList.add('active');
+        }
+    });
+
+    //    操作
+    can.onmousedown=function(e){
+        ox=e.offsetX;        //鼠标按下的位置
+        oy=e.offsetY;
+        can.onmousemove=function(e){
+            mx=e.offsetX;    //鼠标移动的位置
+            my=e.offsetY;
+            x=mx-ox;     //拖动
+            y=my-oy;
+            paint.clearRect(0,0,can.width,can.height);  //清除之前的所有图形
+            if(arr.length>=1){         //判断数组长度，有长度执行
+                let imgData=arr[arr.length-1];   //获取数组组后一个信息
+                putImg=paint.putImageData(arr[arr.length-1],0,0);   //绘制之前保留的所有图形
+            }
+//                  选项
+            switch (type){
+                case 'drawLine':     //线
+                    obj.line();
+                    break;
+                case 'drawStrokeRect':   //轮廓矩形
+                    obj.strokeRect();
+                    break;
+                case 'drawFillRect':    //填充矩形
+                   obj.fillRect();
+                    break;
+                case 'drawStrokePol' :    //轮廓多边形
+                   obj.strokePol();
+                    break;
+                case 'drawFillPol' :   //同上  只是为填充多边形
+                    obj.fillPol();
+                    break;
+                case 'drawGradualRect':      //渐变矩形
+                    obj.gradualRect();
+                    break;
+                case 'drawStrokeCircle':    //轮廓圆
+                   obj.strokeCircle();
+                    break;
+                case 'drawFillCircle':    //填充圆
+                    obj.fillCircle();
+                    break;
+                case 'drawGradualCircle':     //渐变圆
+                    obj.gradualCircle();
+                    break;
+            }
+
+
+        }
+        can.onmouseup=function(){
+            //输入文字
+            if(type=='drawFillText'){
+                obj. fillText();
+            }else if(type=='drawStrokeText'){
+                obj.strokeText()
+            }
+
+
+            can.onmousemove=null;    //鼠标抬起停止鼠标移动时的动作
+            getImg=paint.getImageData(0,0,can.width,can.height);  //获取此时此刻的图形信息
+            arr.push(getImg);    //存储到数组中
+        }
+    }
+    class draw{
+        constructor(paint){
+            this.paint=paint;
+            this.num=document.querySelector('#num');
+
+        }
+        line(){
+            this.paint.beginPath();
+            this.paint.moveTo(ox,oy);
+            this.paint.lineTo(mx,my);
+            this.paint.strokeStyle=color;
+            this.paint.stroke();
+            this.paint.closePath();
+        }
+        strokeRect(){
+            this.paint.strokeStyle=color;
+            this.paint.strokeRect(ox,oy,x,y);  //画矩形图
+        }
+        fillRect(){
+            this.paint.fillStyle=color;
+            this.paint.fillRect(ox,oy,x,y);
+        }
+        strokePol(){
+            var n=this.num.value;   //获取初识数据的value
+            var ran=360/n;
+            var r=Math.sqrt(Math.pow(x,2)+Math.pow(y,2));   //写出半径
+            this.paint.beginPath();
+            //    paint.moveTo(200,200)    //千万不能要
+            for(var i=0;i<=n;i++){
+                var q=ox+Math.cos((i*ran+45)*(Math.PI/180))*r;  //求多边形的坐标点
+                var w=oy+Math.sin((i*ran+45)*(Math.PI/180))*r;
+                this.paint.lineTo(q,w);   //画出线条
+            }
+            this.paint.strokeStyle=color;
+            this.paint.stroke();    //填充线条颜色
+            this.paint.closePath();   //闭合路径
+        }
+        fillPol(){
+            var n=this.num.value;
+            var ran=360/n;
+            var r=Math.sqrt(Math.pow(x,2)+Math.pow(y,2))
+            this.paint.beginPath();
+            //    paint.moveTo(200,200)    //千万不能要
+            for(var i=0;i<=n;i++){
+                var q=ox+Math.cos((i*ran+45)*(Math.PI/180))*r;
+                var w=oy+Math.sin((i*ran+45)*(Math.PI/180))*r;
+                this.paint.lineTo(q,w);
+            }
+            this.paint.fillStyle=color;
+            this.paint.fill();
+            this.paint.closePath();
+        }
+        gradualRect(){
+            var gradual=paint.createLinearGradient(ox,oy,mx,oy);
+            gradual.addColorStop(0,'red');
+            gradual.addColorStop(0.2,'green');
+            gradual.addColorStop(0.4,'orange');
+            gradual.addColorStop(0.6,'yellow');
+            gradual.addColorStop(0.8,'purple');
+            gradual.addColorStop(1,'blue');
+            this.paint.fillStyle=gradual;
+            this.paint.fillRect(ox,oy,x,y);
+        }
+        strokeCircle(){
+            this.paint.beginPath();
+            this.paint.strokeStyle=color;
+            var r=Math.sqrt(Math.pow(x,2)+Math.pow(y,2))
+            this.paint.arc(ox,oy,r,0,Math.PI*2);
+            this.paint.stroke();
+        }
+        fillCircle(){
+            this.paint.beginPath();
+            this.paint.fillStyle=color;
+            var r=Math.sqrt(Math.pow(x,2)+Math.pow(y,2))
+            this.paint.arc(ox,oy,r,0,Math.PI*2);
+            this.paint.fill();
+        }
+        gradualCircle(){
+            var r=Math.sqrt(Math.pow(x,2)+Math.pow(y,2))
+            this.paint.beginPath();
+            var gra=this.paint.createRadialGradient(ox,oy,0,ox,oy,r);  //难理解
+            gra.addColorStop(0,'red');
+            gra.addColorStop(0.5,'green');
+            gra.addColorStop(1,'yellow');
+            this.paint.fillStyle=gra;
+            this.paint.arc(ox,oy,r,0,Math.PI*2);
+            this.paint.fill();
+        }
+        fillText(){
+            var text=window.prompt('请输入文字');
+            this.paint.textAlign='right';
+            this.paint.font='25px 华文行楷';
+            this.paint.fillStyle=color;
+            this.paint.fillText(text,ox,oy);
+            this.paint.fill();
+        }
+        strokeText(){
+            var text=window.prompt('请输入文字');
+            this.paint.textAlign='right';
+            this.paint.font='25px 华文行楷';
+            this.paint.strokeStyle=color;
+            this.paint.strokeText(text,ox,oy);
+            this.paint.stroke();
+        }
+    }
+    var obj=new draw(paint);
+</script>
