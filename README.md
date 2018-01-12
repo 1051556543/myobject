@@ -20,6 +20,6 @@ todolist: https://tmrxiaoxiao.github.io/myobject/todolist/index.html
 
 贪吃蛇： https://tmrxiaoxiao.github.io/myobject/%E8%B4%AA%E5%90%83%E8%9B%87/%E8%B4%AA%E5%90%83%E8%9B%87%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0.html
 
-个人博客：https://taomouren.duapp.com
+个人博客：http://taomouren.duapp.com
 
-企业站： https://nengguang.duapp.com
+企业站： http://nengguang.duapp.com
