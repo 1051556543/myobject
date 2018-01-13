@@ -23,3 +23,5 @@ todolist: https://tmrxiaoxiao.github.io/myobject/todolist/index.html
 个人博客：http://taomouren.duapp.com
 
 企业站： http://nengguang.duapp.com
+
+五子棋： https://tmrxiaoxiao.github.io/myobject/%E4%BA%94%E5%AD%90%E6%A3%8B/index.html
